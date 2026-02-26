@@ -1,0 +1,40 @@
+services:
+  - type: web
+    name: medical-system-backend
+    env: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate
+    startCommand: gunicorn backend.wsgi:application
+    envVars:
+      - key: DEBUG
+        value: "False"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALLOWED_HOSTS
+        value: medical-system-backend.onrender.com
+      - key: CORS_ALLOW_ALL_ORIGINS
+        value: "False"
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://medical-system-frontend.onrender.com
+      - key: CSRF_TRUSTED_ORIGINS
+        value: https://medical-system-frontend.onrender.com
+      - key: DATABASE_URL
+        fromDatabase:
+          name: medical-system-db
+          property: connectionString
+
+  - type: web
+    name: medical-system-frontend
+    env: static
+    plan: free
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://medical-system-backend.onrender.com/api
+
+databases:
+  - name: medical-system-db
+    plan: free
