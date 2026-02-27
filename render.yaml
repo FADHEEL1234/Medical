@@ -5,13 +5,21 @@ services:
     plan: free
     rootDir: backend
     buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
-    preDeployCommand: python manage.py migrate
+    preDeployCommand: python manage.py migrate && python manage.py create_admin
     startCommand: gunicorn backend.wsgi:application
     envVars:
       - key: DEBUG
         value: "False"
       - key: SECRET_KEY
         generateValue: true
+      - key: DATABASE_URL
+        value: postgresql://neondb_owner:npg_hf04nDQNIXYt@ep-twilight-morning-aiwosgmy-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+      - key: DJANGO_SUPERUSER_USERNAME
+        value: Admin
+      - key: DJANGO_SUPERUSER_EMAIL
+        value: admin@example.com
+      - key: DJANGO_SUPERUSER_PASSWORD
+        value: Fadhil@12345
       - key: ALLOWED_HOSTS
         value: medical-system-backend.onrender.com
       - key: CORS_ALLOW_ALL_ORIGINS
