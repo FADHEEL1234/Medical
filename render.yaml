@@ -4,9 +4,8 @@ services:
     runtime: python
     plan: free
     rootDir: backend
-    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
-    preDeployCommand: python manage.py migrate && python manage.py create_admin
-    startCommand: gunicorn backend.wsgi:application
+    buildCommand: bash build.sh
+    startCommand: bash -c "python manage.py migrate && python manage.py create_admin && gunicorn backend.wsgi:application"
     envVars:
       - key: DEBUG
         value: "False"
