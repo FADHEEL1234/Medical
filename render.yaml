@@ -25,6 +25,6 @@ services:
       - key: CORS_ALLOW_ALL_ORIGINS
         value: "False"
       - key: CORS_ALLOWED_ORIGINS
-        value: https://medical-system-frontend.onrender.com
+        value: https://medical-7v7s.vercel.app
       - key: CSRF_TRUSTED_ORIGINS
-        value: https://medical-system-frontend.onrender.com
+        value: https://medical-7v7s.vercel.app
