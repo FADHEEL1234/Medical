@@ -12,6 +12,9 @@ function Register() {
     password_confirm: '',
     first_name: '',
     last_name: '',
+    gender: '',
+    address: '',
+    age: '',
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -135,6 +138,46 @@ function Register() {
             name="last_name"
             value={formData.last_name}
             onChange={handleChange}
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="gender">Gender *</label>
+          <select
+            id="gender"
+            name="gender"
+            value={formData.gender}
+            onChange={handleChange}
+            required
+          >
+            <option value="">-- Select Gender --</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="address">Address *</label>
+          <input
+            type="text"
+            id="address"
+            name="address"
+            value={formData.address}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="age">Age *</label>
+          <input
+            type="number"
+            id="age"
+            name="age"
+            value={formData.age}
+            onChange={handleChange}
+            required
+            min="0"
           />
         </div>
 

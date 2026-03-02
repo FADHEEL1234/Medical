@@ -92,6 +92,7 @@ export const appointmentsAPI = {
   // admin endpoints
   adminList: () => api.get('/admin/appointments/'),
   adminUpdate: (id, data) => api.patch(`/admin/appointments/${id}/`, data),
+  adminDelete: (id) => api.delete(`/admin/appointments/${id}/`),
 };
 
 export default api;

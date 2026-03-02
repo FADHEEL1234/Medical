@@ -10,6 +10,7 @@ function AdminDashboard() {
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [selectedPatientId, setSelectedPatientId] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -65,6 +66,30 @@ function AdminDashboard() {
     } catch (err) {
       setError('Could not update appointment');
     }
+  };
+
+  const deleteAppointment = async (id) => {
+    if (!window.confirm('Delete this appointment? This cannot be undone.')) return;
+    try {
+      await appointmentsAPI.adminDelete(id);
+      fetchData();
+    } catch (err) {
+      setError('Could not delete appointment');
+    }
+  };
+
+  const deleteDoctor = async (id) => {
+    if (!window.confirm('Delete this doctor? This cannot be undone.')) return;
+    try {
+      await doctorsAPI.delete(id);
+      fetchData();
+    } catch (err) {
+      setError('Could not delete doctor');
+    }
+  };
+
+  const togglePatientDetails = (appointmentId) => {
+    setSelectedPatientId((prev) => (prev === appointmentId ? null : appointmentId));
   };
 
   return (
@@ -145,6 +170,13 @@ function AdminDashboard() {
               >
                 Edit
               </button>
+              <button
+                className="btn"
+                style={{ fontSize: '12px', marginLeft: '8px', backgroundColor: '#dc3545', color: '#fff' }}
+                onClick={() => deleteDoctor(d.id)}
+              >
+                Delete
+              </button>
             </li>
           ))}
         </ul>
@@ -161,14 +193,38 @@ function AdminDashboard() {
         <table className="admin-table">
           <thead>
             <tr>
-              <th>ID</th><th>User</th><th>Doctor</th><th>Date</th><th>Status</th><th>Actions</th>
+              <th>ID</th><th>Patient</th><th>Doctor</th><th>Date</th><th>Status</th><th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {appointments.map(a => (
               <tr key={a.id}>
                 <td>{a.id}</td>
-                <td>{a.user_name}</td>
+                <td>
+                  <button
+                    type="button"
+                    onClick={() => togglePatientDetails(a.id)}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      padding: 0,
+                      color: '#007bff',
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                    }}
+                  >
+                    {[a.patient_first_name, a.patient_last_name].filter(Boolean).join(' ') || a.user_name}
+                  </button>
+                  {selectedPatientId === a.id && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '6px' }}>
+                      <span style={{ fontSize: '12px' }}>Email: {a.patient_email || 'N/A'}</span>
+                      <span style={{ fontSize: '12px' }}>
+                        Gender: {a.patient_gender || 'N/A'}{typeof a.patient_age !== 'undefined' && a.patient_age !== null ? `, Age: ${a.patient_age}` : ', Age: N/A'}
+                      </span>
+                      <span style={{ fontSize: '12px' }}>Address: {a.patient_address || 'N/A'}</span>
+                    </div>
+                  )}
+                </td>
                 <td>{a.doctor_name}</td>
                 <td>{new Date(a.appointment_date).toLocaleString()}</td>
                 <td>
@@ -201,6 +257,13 @@ function AdminDashboard() {
                 Reject
               </button>
             )}
+            <button
+              className="btn"
+              onClick={() => deleteAppointment(a.id)}
+              style={{ backgroundColor: '#6c757d', color: '#fff', marginLeft: '6px' }}
+            >
+              Delete
+            </button>
           </td>
               </tr>
             ))}

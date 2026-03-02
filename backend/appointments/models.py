@@ -67,3 +67,21 @@ class Appointment(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+
+
+class PatientProfile(models.Model):
+    """Extended patient info linked to the auth user."""
+    GENDER_CHOICES = [
+        ('Male', 'Male'),
+        ('Female', 'Female'),
+    ]
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
+    address = models.CharField(max_length=255)
+    age = models.PositiveIntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Profile for {self.user.username}"

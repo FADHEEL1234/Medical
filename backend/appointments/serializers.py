@@ -1,17 +1,30 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from .models import Doctor, Appointment
+from .models import Doctor, Appointment, PatientProfile
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     """Serializer for user registration."""
     password = serializers.CharField(write_only=True, min_length=8)
     password_confirm = serializers.CharField(write_only=True, min_length=8)
+    gender = serializers.ChoiceField(choices=PatientProfile.GENDER_CHOICES)
+    address = serializers.CharField(max_length=255)
+    age = serializers.IntegerField(min_value=0)
     
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'password_confirm', 'first_name', 'last_name']
+        fields = [
+            'username',
+            'email',
+            'password',
+            'password_confirm',
+            'first_name',
+            'last_name',
+            'gender',
+            'address',
+            'age',
+        ]
     
     def validate(self, data):
         if data['password'] != data['password_confirm']:
@@ -20,12 +33,21 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         validated_data.pop('password_confirm')
+        gender = validated_data.pop('gender')
+        address = validated_data.pop('address')
+        age = validated_data.pop('age')
         user = User.objects.create_user(
             username=validated_data['username'],
             email=validated_data.get('email', ''),
             password=validated_data['password'],
             first_name=validated_data.get('first_name', ''),
             last_name=validated_data.get('last_name', ''),
+        )
+        PatientProfile.objects.create(
+            user=user,
+            gender=gender,
+            address=address,
+            age=age,
         )
         return user
 
@@ -77,13 +99,39 @@ class AppointmentSerializer(serializers.ModelSerializer):
 
 class AppointmentAdminSerializer(AppointmentSerializer):
     """Variant used by admin endpoints that permits changing status."""
+    patient_first_name = serializers.CharField(source='user.first_name', read_only=True)
+    patient_last_name = serializers.CharField(source='user.last_name', read_only=True)
+    patient_email = serializers.CharField(source='user.email', read_only=True)
+    patient_gender = serializers.SerializerMethodField()
+    patient_address = serializers.SerializerMethodField()
+    patient_age = serializers.SerializerMethodField()
 
     class Meta(AppointmentSerializer.Meta):
         # copy fields but make `status` writable so staff can update it
+        fields = AppointmentSerializer.Meta.fields + [
+            'patient_first_name',
+            'patient_last_name',
+            'patient_email',
+            'patient_gender',
+            'patient_address',
+            'patient_age',
+        ]
         read_only_fields = [
             f for f in AppointmentSerializer.Meta.read_only_fields
             if f != 'status'
         ]
+
+    def get_patient_gender(self, obj):
+        profile = getattr(obj.user, 'profile', None)
+        return getattr(profile, 'gender', None)
+
+    def get_patient_address(self, obj):
+        profile = getattr(obj.user, 'profile', None)
+        return getattr(profile, 'address', None)
+
+    def get_patient_age(self, obj):
+        profile = getattr(obj.user, 'profile', None)
+        return getattr(profile, 'age', None)
 
 
 class AppointmentCreateSerializer(serializers.ModelSerializer):
