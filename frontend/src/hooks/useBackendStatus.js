@@ -9,16 +9,31 @@ export default function useBackendStatus() {
   const [error, setError] = useState('');
 
   useEffect(() => {
+    let cancelled = false;
+    const WARMUP_INTERVAL_MS = 5 * 60 * 1000;
+
     const probe = async () => {
       try {
-        await api.get('/health/');
-        setBackendUp(true);
+        await api.get('/health/', { timeout: 8000 });
+        if (!cancelled) {
+          setBackendUp(true);
+          setError('');
+        }
       } catch (e) {
-        setBackendUp(false);
-        setError('Unable to reach backend. Please make sure the Django server is running.');
+        if (!cancelled) {
+          setBackendUp(false);
+          setError('Unable to reach backend. Please make sure the Django server is running.');
+        }
       }
     };
+
     probe();
+    const intervalId = setInterval(probe, WARMUP_INTERVAL_MS);
+
+    return () => {
+      cancelled = true;
+      clearInterval(intervalId);
+    };
   }, []);
 
   return { backendUp, error };
