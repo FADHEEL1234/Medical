@@ -970,3 +970,269 @@ table tr:hover {
   box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
 }
 
+/* user dashboard advanced widgets */
+.user-topbar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.user-theme-toggle {
+  min-width: 92px;
+}
+
+.user-notification-wrap {
+  position: relative;
+}
+
+.user-notification-btn {
+  position: relative;
+}
+
+.user-badge {
+  min-width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 0 6px;
+}
+
+.user-notification-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: min(420px, 90vw);
+  max-height: 320px;
+  overflow: auto;
+  background: #fff;
+  border: 1px solid #dbeafe;
+  border-radius: 14px;
+  box-shadow: 0 14px 28px rgba(2, 6, 23, 0.12);
+  padding: 10px;
+  z-index: 20;
+}
+
+.user-note {
+  display: grid;
+  gap: 4px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.user-note strong {
+  font-size: 11px;
+  color: #64748b;
+}
+
+.user-note span {
+  font-size: 13px;
+}
+
+.user-note-info {
+  background: #f8fafc;
+}
+
+.user-note-success {
+  background: #ecfdf5;
+  border-color: #86efac;
+}
+
+.user-note-warning {
+  background: #fffbeb;
+  border-color: #fcd34d;
+}
+
+.user-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.user-panel {
+  background: var(--user-card);
+  border: 1px solid #dbeafe;
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.user-panel h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.user-panel-full {
+  margin-top: 14px;
+}
+
+.user-upcoming-box p {
+  margin: 0 0 8px;
+  font-size: 14px;
+}
+
+.user-search-results {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.user-inline-card {
+  border: 1px solid #dbeafe;
+  border-radius: 10px;
+  background: #f8fbff;
+  padding: 10px 12px;
+  cursor: pointer;
+  display: grid;
+  text-align: left;
+}
+
+.user-inline-card span {
+  font-weight: 600;
+}
+
+.user-inline-card small {
+  color: #64748b;
+}
+
+.user-reminder-form {
+  display: grid;
+  grid-template-columns: 1fr 130px auto;
+  gap: 8px;
+}
+
+.user-reminder-form input {
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 9px 10px;
+  font-size: 14px;
+}
+
+.user-list {
+  display: grid;
+  gap: 8px;
+}
+
+.user-list-item {
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  background: #fff;
+}
+
+.user-list-muted small {
+  color: #64748b;
+}
+
+.user-profile-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.user-profile-grid input {
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 9px 10px;
+  font-size: 14px;
+}
+
+.user-progress-wrap {
+  height: 10px;
+  background: #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.user-progress-bar {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #06b6d4, #0284c7);
+}
+
+.user-theme-dark {
+  --user-ink: #e5e7eb;
+  --user-muted: #94a3b8;
+  --user-card: #0f172a;
+  background: linear-gradient(180deg, #0b1220 0%, #0f172a 100%);
+}
+
+.user-theme-dark .user-stat-card,
+.user-theme-dark .user-panel,
+.user-theme-dark .user-inline-card,
+.user-theme-dark .user-list-item,
+.user-theme-dark .user-notification-panel {
+  background: #111c33;
+  border-color: #22314f;
+  color: #e2e8f0;
+}
+
+.user-theme-dark .user-kicker,
+.user-theme-dark .user-hero p,
+.user-theme-dark .user-stat-card span,
+.user-theme-dark .user-inline-card small,
+.user-theme-dark .user-note strong,
+.user-theme-dark .user-list-muted small {
+  color: #9fb0ce;
+}
+
+.user-theme-dark .user-live {
+  background: #1e293b;
+  border-color: #334155;
+  color: #cbd5e1;
+}
+
+.user-theme-dark .admin-search,
+.user-theme-dark .user-reminder-form input,
+.user-theme-dark .user-profile-grid input {
+  background: #0b1220;
+  border-color: #334155;
+  color: #e5e7eb;
+}
+
+@media (max-width: 900px) {
+  .user-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .user-reminder-form {
+    grid-template-columns: 1fr;
+  }
+
+  .user-profile-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .user-topbar {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .user-notification-panel {
+    right: auto;
+    left: 0;
+  }
+}
+
