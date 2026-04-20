@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { doctorsAPI, appointmentsAPI } from '../api/api';
 import { useNavigate } from 'react-router-dom';
+import useBackendStatus from '../hooks/useBackendStatus';
 
 const EMPTY_DOCTOR = {
   name: '',
@@ -198,6 +199,7 @@ function AdminDashboard() {
   const [statusFilter, setStatusFilter] = useState('All');
   const [sortByDate, setSortByDate] = useState('latest');
   const [currentTime, setCurrentTime] = useState(new Date());
+  const { backendUp, error: backendError } = useBackendStatus();
 
   useEffect(() => {
     if (backendUp) {
@@ -206,7 +208,7 @@ function AdminDashboard() {
       setError(backendError || 'Backend unavailable');
       setInitialLoad(false);
     }
-  }, [backendUp]);
+  }, [backendUp, backendError]);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);

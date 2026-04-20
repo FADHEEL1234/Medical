@@ -119,7 +119,7 @@ function Login() {
             </button>
           </div>
 
-          <div style={{ textAlign: 'center', marginTop: 24px }}>
+          <div style={{ textAlign: 'center', marginTop: '24px' }}>
             <Link to="/forgot-password" className="register-link" style={{ fontSize: '0.9rem' }}>Forgot Password?</Link>
           </div>
         </form>
