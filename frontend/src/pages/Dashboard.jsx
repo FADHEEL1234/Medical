@@ -184,6 +184,14 @@ const getGreeting = (date) => {
   return 'Good evening';
 };
 
+const healthTips = [
+  'Drink plenty of water before your visit to stay energized and alert.',
+  'Write down your top three questions before your appointment so nothing gets missed.',
+  'A short evening walk can help you relax and improve sleep quality.',
+  'Set a reminder for medication and follow-up notes to keep your care plan on track.',
+  'Track a simple mood log for better conversations with your provider.'
+];
+
 const getStatusTone = (status) => {
   switch (status) {
     case 'Approved':
@@ -411,6 +419,11 @@ function Dashboard() {
       done: reminders.length > 0
     }
   ]), [profileCompleteness, upcomingAppointment, reminders]);
+
+  const dailyHealthTip = useMemo(
+    () => healthTips[now.getDate() % healthTips.length],
+    [now]
+  );
 
   const unresolvedNotifications = notifications.filter((item) => !item.seen).length;
 
@@ -723,6 +736,11 @@ function Dashboard() {
               <span>Unread alerts</span>
               <strong>{unresolvedNotifications}</strong>
             </article>
+          </div>
+
+          <div className="patient-health-tip">
+            <strong>Today’s health tip</strong>
+            <p>{dailyHealthTip}</p>
           </div>
         </aside>
       </section>

@@ -389,6 +389,36 @@ table th {
   color: #fff;
 }
 
+.app-nav__user-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-right: 14px;
+}
+
+.app-nav__avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--teal), var(--teal-strong));
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+}
+
+.app-nav__greeting {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.app-nav__role {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
 /* LOGIN HERO & FORM ENHANCEMENTS */
 .login-hero {
   min-height: 100vh;
@@ -700,6 +730,80 @@ table th {
 
 .register-link:hover {
   color: var(--teal);
+}
+
+.login-card__intro {
+  margin-bottom: 22px;
+}
+
+.login-card__intro p {
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.login-card__features {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.login-card__features span {
+  display: block;
+  padding: 10px;
+  border-radius: 999px;
+  background: rgba(15, 118, 110, 0.08);
+  color: var(--teal-strong);
+  text-align: center;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.login-card__intro-text {
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+
+.patient-health-tip {
+  padding: 20px;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(15, 118, 110, 0.14);
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: inset 0 0 0 1px rgba(15, 118, 110, 0.04);
+}
+
+.patient-health-tip strong {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+.patient-health-tip p {
+  margin: 0;
+  color: var(--panel-muted);
+  line-height: 1.7;
+}
+
+.admin-status-chip-wrapper {
+  margin: 10px 0 0;
+}
+
+.admin-status-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  transition: transform 0.18s ease, opacity 0.18s ease;
+}
+
+.admin-status-chip.is-active {
+  transform: scale(1.02);
+  opacity: 1;
 }
 
 .doctor-card {

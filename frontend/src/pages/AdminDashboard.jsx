@@ -200,6 +200,7 @@ function AdminDashboard() {
   const [sortByDate, setSortByDate] = useState('latest');
   const [currentTime, setCurrentTime] = useState(new Date());
   const [metricPulse, setMetricPulse] = useState(false);
+  const [backendPulse, setBackendPulse] = useState(false);
   const { backendUp, error: backendError } = useBackendStatus();
 
   useEffect(() => {
@@ -220,6 +221,12 @@ function AdminDashboard() {
     const timer = window.setTimeout(() => setMetricPulse(true), 260);
     return () => window.clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    setBackendPulse(true);
+    const pulseTimer = window.setTimeout(() => setBackendPulse(false), 500);
+    return () => window.clearTimeout(pulseTimer);
+  }, [backendUp]);
 
   const fetchData = async () => {
     try {
@@ -402,8 +409,11 @@ function AdminDashboard() {
       <section className="admin-hero-card">
         <div className="admin-hero-card__copy">
           <span className="admin-hero-card__eyebrow">Operations desk</span>
-          <h1>
-            <Icon name="shield" />
+          <div className="admin-status-chip-wrapper">
+            <span className={`admin-status-chip status-pill status-pill-${backendUp ? 'success' : 'danger'}${backendPulse ? ' is-active' : ''}`}>
+              {backendUp ? 'Backend online' : 'Backend offline'}
+            </span>
+          </div>
             Clinical operations dashboard
           </h1>
           <p>

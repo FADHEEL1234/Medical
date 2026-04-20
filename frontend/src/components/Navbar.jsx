@@ -35,15 +35,14 @@ function Navbar() {
 
         <div className="app-nav__content">
           {username && (
-            <div className="app-nav__avatar" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <div className="avatar-placeholder" style={{
-                width: '32px', height: '32px', borderRadius: '50%', 
-                background: 'linear-gradient(135deg, var(--teal), var(--teal-strong))',
-                display: 'grid', placeItems: 'center', color: 'white', fontWeight: 'bold', fontSize: '14px'
-              }}>
+            <div className="app-nav__user-group">
+              <div className="app-nav__avatar">
                 {username.charAt(0).toUpperCase()}
               </div>
-              <span className="app-nav__user" style={{ fontWeight: '600' }}>{username}</span>
+              <div>
+                <span className="app-nav__greeting">Hi, {username}</span>
+                <span className="app-nav__role">{isStaff ? 'Admin' : 'Patient'}</span>
+              </div>
             </div>
           )}
 

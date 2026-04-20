@@ -57,7 +57,16 @@ function Login() {
 
       <div className="card">
         <h2>Secure Login</h2>
-        
+
+        <div className="login-card__intro">
+          <p>Access your care dashboard, book appointments, and keep treatment reminders active in one secure portal.</p>
+          <div className="login-card__features">
+            <span>Fast sign-in</span>
+            <span>Live alerts</span>
+            <span>Smart scheduling</span>
+          </div>
+        </div>
+
         {backendError && <div className="message message-error">{backendError}</div>}
         {error && <div className="message message-error">{error}</div>}
         
