@@ -220,6 +220,17 @@ h4,
   }
 }
 
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .status-pill,
 .status-badge {
   display: inline-flex;
@@ -413,6 +424,78 @@ table th {
   position: relative;
   z-index: 1;
   animation: slideUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.login-hero__decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.login-hero__bubble {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.24;
+  filter: blur(16px);
+  animation: bubbleDrift 14s infinite ease-in-out;
+}
+
+.login-hero__bubble--one {
+  width: 180px;
+  height: 180px;
+  background: rgba(15, 118, 110, 0.22);
+  top: 12%;
+  left: 8%;
+}
+
+.login-hero__bubble--two {
+  width: 120px;
+  height: 120px;
+  background: rgba(202, 138, 4, 0.16);
+  bottom: 12%;
+  right: 12%;
+  animation-duration: 18s;
+}
+
+.login-hero__bubble--three {
+  width: 100px;
+  height: 100px;
+  background: rgba(245, 158, 11, 0.18);
+  top: 20%;
+  right: 14%;
+  animation-duration: 16s;
+}
+
+@keyframes bubbleDrift {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-18px) scale(1.05); }
+}
+
+.password-toggle {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 38px;
+  border: none;
+  background: rgba(15, 118, 110, 0.08);
+  border-radius: 999px;
+  cursor: pointer;
+  color: var(--teal-strong);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.password-toggle:hover {
+  background: rgba(15, 118, 110, 0.16);
+}
+
+.login-footer {
+  color: var(--muted);
+  font-size: 0.92rem;
 }
 
 @keyframes slideUp {
@@ -1107,6 +1190,24 @@ table th {
 .admin-dashboard {
   display: grid;
   gap: 20px;
+  position: relative;
+}
+
+.patient-dashboard::before,
+.admin-dashboard::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 28%),
+              radial-gradient(circle at bottom right, rgba(202, 138, 4, 0.10), transparent 24%);
+  z-index: 0;
+}
+
+.patient-dashboard > *,
+.admin-dashboard > * {
+  position: relative;
+  z-index: 1;
 }
 
 .patient-dashboard {
@@ -1345,6 +1446,45 @@ table th {
 .patient-action-card:hover {
   transform: translateY(-2px);
   border-color: rgba(15, 118, 110, 0.28);
+}
+
+.patient-metric-card,
+.admin-metric-card,
+.admin-focus-grid__item,
+.admin-summary-list__item,
+.admin-doctor-tile,
+.admin-appointment-card,
+.patient-next-visit,
+.admin-focus-card {
+  animation: fadeInUp 0.5s ease forwards;
+  opacity: 0;
+}
+
+.patient-metric-card.is-active,
+.admin-metric-card.is-active {
+  opacity: 1;
+}
+
+.dashboard-panel {
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.dashboard-panel:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 24px 48px rgba(15, 118, 110, 0.12);
+}
+
+.admin-hero-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-hero-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, rgba(15, 118, 110, 0.1), transparent 35%);
+  pointer-events: none;
 }
 
 .patient-action-card__icon,

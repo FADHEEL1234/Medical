@@ -203,6 +203,7 @@ function Dashboard() {
   const [now, setNow] = useState(new Date());
   const [theme, setTheme] = useState(localStorage.getItem(STORAGE.theme) || 'light');
   const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [metricPulse, setMetricPulse] = useState(false);
   const [doctorQuery, setDoctorQuery] = useState('');
   const [doctors, setDoctors] = useState([]);
   const [appointments, setAppointments] = useState([]);
@@ -253,6 +254,15 @@ function Dashboard() {
   useEffect(() => {
     localStorage.setItem(STORAGE.theme, theme);
   }, [theme]);
+
+  useEffect(() => {
+    if (!loading) {
+      setMetricPulse(true);
+      const timer = setTimeout(() => setMetricPulse(false), 1200);
+      return () => clearTimeout(timer);
+    }
+    return undefined;
+  }, [loading]);
 
   useEffect(() => {
     let active = true;

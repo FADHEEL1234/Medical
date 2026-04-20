@@ -199,6 +199,7 @@ function AdminDashboard() {
   const [statusFilter, setStatusFilter] = useState('All');
   const [sortByDate, setSortByDate] = useState('latest');
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [metricPulse, setMetricPulse] = useState(false);
   const { backendUp, error: backendError } = useBackendStatus();
 
   useEffect(() => {
@@ -213,6 +214,11 @@ function AdminDashboard() {
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setMetricPulse(true), 260);
+    return () => window.clearTimeout(timer);
   }, []);
 
   const fetchData = async () => {
@@ -455,36 +461,48 @@ function AdminDashboard() {
       {error && <div className="message message-error">{error}</div>}
 
       <section className="admin-metrics">
-        <article className="admin-metric-card">
-          <span>Total doctors</span>
-          <strong>{dashboardStats.doctors}</strong>
-          <p>{specializationCount} specialties available</p>
-        </article>
-        <article className="admin-metric-card">
-          <span>Total appointments</span>
-          <strong>{dashboardStats.appointments}</strong>
-          <p>{filteredAppointments.length} match current filters</p>
-        </article>
-        <article className="admin-metric-card">
-          <span>Pending review</span>
-          <strong>{dashboardStats.pending}</strong>
-          <p>Needs action from staff</p>
-        </article>
-        <article className="admin-metric-card">
-          <span>Approved</span>
-          <strong>{dashboardStats.approved}</strong>
-          <p>Confirmed and scheduled</p>
-        </article>
-        <article className="admin-metric-card">
-          <span>Rejected</span>
-          <strong>{dashboardStats.rejected}</strong>
-          <p>Closed appointment requests</p>
-        </article>
-        <article className="admin-metric-card">
-          <span>Today&apos;s load</span>
-          <strong>{dashboardStats.todayAppointments}</strong>
-          <p>Appointments due today</p>
-        </article>
+        {[
+          {
+            label: 'Total doctors',
+            value: dashboardStats.doctors,
+            detail: `${specializationCount} specialties available`
+          },
+          {
+            label: 'Total appointments',
+            value: dashboardStats.appointments,
+            detail: `${filteredAppointments.length} match current filters`
+          },
+          {
+            label: 'Pending review',
+            value: dashboardStats.pending,
+            detail: 'Needs action from staff'
+          },
+          {
+            label: 'Approved',
+            value: dashboardStats.approved,
+            detail: 'Confirmed and scheduled'
+          },
+          {
+            label: 'Rejected',
+            value: dashboardStats.rejected,
+            detail: 'Closed appointment requests'
+          },
+          {
+            label: 'Today\'s load',
+            value: dashboardStats.todayAppointments,
+            detail: 'Appointments due today'
+          }
+        ].map((metric, index) => (
+          <article
+            key={metric.label}
+            className={`admin-metric-card${metricPulse ? ' is-active' : ''}`}
+            style={{ animationDelay: `${index * 0.08}s` }}
+          >
+            <span>{metric.label}</span>
+            <strong>{metric.value}</strong>
+            <p>{metric.detail}</p>
+          </article>
+        ))}
       </section>
       <div className="admin-layout">
         <section className="dashboard-panel admin-panel">

@@ -49,6 +49,12 @@ function Login() {
 
   return (
     <div className="login-hero">
+      <div className="login-hero__decor">
+        <span className="login-hero__bubble login-hero__bubble--one" />
+        <span className="login-hero__bubble login-hero__bubble--two" />
+        <span className="login-hero__bubble login-hero__bubble--three" />
+      </div>
+
       <div className="card">
         <h2>Secure Login</h2>
         
