@@ -527,8 +527,53 @@ function Dashboard() {
 
   if (loading) {
     return (
-      <div className="loading">
-        <div className="spinner"></div>
+      <div className={`patient-dashboard patient-dashboard-${theme}`}>
+        <div className="patient-dashboard__toolbar">
+          <div className="skeleton-line skeleton-line--medium"></div>
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <div className="skeleton" style={{ width: '120px', height: '40px', borderRadius: '999px' }}></div>
+            <div className="skeleton" style={{ width: '80px', height: '40px', borderRadius: '999px' }}></div>
+          </div>
+        </div>
+
+        <section className="patient-hero" style={{ gridTemplateColumns: '1fr', gap: '24px' }}>
+          <div className="skeleton" style={{ height: '300px', borderRadius: 'var(--radius-xl)' }}></div>
+          <div style={{ display: 'grid', gap: '16px' }}>
+            <div className="skeleton skeleton-line skeleton-line--long"></div>
+            <div className="skeleton-line skeleton-line--medium"></div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
+              <div className="skeleton" style={{ height: '120px' }}></div>
+              <div className="skeleton" style={{ height: '120px' }}></div>
+            </div>
+          </div>
+        </section>
+
+        <section className="patient-metrics" style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
+          {Array(4).fill(0).map((_, i) => (
+            <article key={i} className="patient-metric-card">
+              <div className="skeleton-avatar"></div>
+              <div>
+                <div className="skeleton-line skeleton-line--short"></div>
+                <div className="skeleton-line skeleton-line--medium"></div>
+              </div>
+            </article>
+          ))}
+        </section>
+
+        <div className="patient-layout">
+          {Array(4).fill(0).map((_, i) => (
+            <section key={i} className="dashboard-panel" style={{ gridColumn: i % 2 === 0 ? '1' : 'span 2' }}>
+              <div className="dashboard-panel__header">
+                <div className="skeleton-line skeleton-line--medium"></div>
+              </div>
+              <div style={{ display: 'grid', gap: '12px', marginTop: '16px' }}>
+                {Array(3).fill(0).map((_, j) => (
+                  <div key={j} className="skeleton-line" style={{ height: '20px' }}></div>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
       </div>
     );
   }
@@ -594,8 +639,14 @@ function Dashboard() {
           </p>
 
           <div className="patient-hero__actions">
-            {actions.map((action) => (
-              <button key={action.key} type="button" className="patient-action-card" onClick={action.onClick}>
+            {actions.map((action, index) => (
+              <button 
+                key={action.key} 
+                type="button" 
+                className="patient-action-card dashboard-card-upgrade"
+                style={{ animationDelay: `${index * 0.1}s` }}
+                onClick={action.onClick}
+              >
                 <span className="patient-action-card__icon">
                   <Icon name={action.icon} />
                 </span>

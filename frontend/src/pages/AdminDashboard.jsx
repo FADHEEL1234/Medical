@@ -189,7 +189,8 @@ function AdminDashboard() {
   const [appointments, setAppointments] = useState([]);
   const [newDoctor, setNewDoctor] = useState(EMPTY_DOCTOR);
   const [editingId, setEditingId] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [initialLoad, setInitialLoad] = useState(true);
   const [error, setError] = useState('');
   const [selectedPatientId, setSelectedPatientId] = useState(null);
   const [doctorSearch, setDoctorSearch] = useState('');
@@ -199,8 +200,13 @@ function AdminDashboard() {
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (backendUp) {
+      fetchData();
+    } else {
+      setError(backendError || 'Backend unavailable');
+      setInitialLoad(false);
+    }
+  }, [backendUp]);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -219,6 +225,8 @@ function AdminDashboard() {
       setError('');
     } catch {
       setError('Failed to load admin data.');
+    } finally {
+      setInitialLoad(false);
     }
   };
 

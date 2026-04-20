@@ -82,144 +82,153 @@ function Register() {
   };
 
 
-  return (
-    <div className="card" style={{ maxWidth: '500px', margin: '40px auto' }}>
-      <h2>Register</h2>
-      
-      {backendError && <div className="message message-error">{backendError}</div>}
-      {error && <div className="message message-error">{error}</div>}
-      
-      <form onSubmit={handleSubmit}>
-        {!backendUp && (
-          <div className="message message-error" style={{ marginBottom: '1rem' }}>
-            Backend not available – start the server and refresh.
-          </div>
-        )}
-        <div className="form-group">
-          <label htmlFor="username">Username *</label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            required
-          />
-        </div>
+  const [currentStep, setCurrentStep] = useState(1);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-        <div className="form-group">
-          <label htmlFor="email">Email *</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
+  const steps = [
+    { title: 'Personal Info', fields: ['username', 'email', 'first_name', 'last_name'] },
+    { title: 'Profile Details', fields: ['gender', 'address', 'age'] },
+    { title: 'Security', fields: ['password', 'password_confirm'] }
+  ];
 
-        <div className="form-group">
-          <label htmlFor="first_name">First Name</label>
-          <input
-            type="text"
-            id="first_name"
-            name="first_name"
-            value={formData.first_name}
-            onChange={handleChange}
-          />
-        </div>
+  const totalSteps = steps.length;
 
-        <div className="form-group">
-          <label htmlFor="last_name">Last Name</label>
-          <input
-            type="text"
-            id="last_name"
-            name="last_name"
-            value={formData.last_name}
-            onChange={handleChange}
-          />
-        </div>
+  const nextStep = () => {
+    setCurrentStep(prev => Math.min(prev + 1, totalSteps));
+  };
 
-        <div className="form-group">
-          <label htmlFor="gender">Gender *</label>
-          <select
-            id="gender"
-            name="gender"
-            value={formData.gender}
-            onChange={handleChange}
-            required
-          >
+  const prevStep = () => {
+    setCurrentStep(prev => Math.max(prev - 1, 1));
+  };
+
+  const handleStepSubmit = (e) => {
+    e.preventDefault();
+    if (currentStep < totalSteps) {
+      nextStep();
+    } else {
+      handleSubmit(e);
+    }
+  };
+
+  const renderField = (field) => {
+    const fieldProps = {
+      id: field,
+      name: field,
+      value: formData[field],
+      onChange: handleChange,
+      className: 'skeleton',
+      placeholder: ' '
+    };
+
+    if (field === 'password') {
+      return (
+        <div className="floating-label-group" style={{ position: 'relative' }}>
+          <input type={showPassword ? 'text' : 'password'} {...fieldProps} required minLength="8" />
+          <label htmlFor={field} className="floating-label">Password</label>
+          <button type="button" className="password-toggle" onClick={() => setShowPassword(!showPassword)}>
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {showPassword ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /> : 
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.036 12.322a1 1 0 010-1.644 6.553 6.553 0 0112.908 0 1 1 0 010 1.644L14.707 14l1.106 1.106a1 1 0 001.414 0 6.553 6.553 0 01-12.191-5.784z" />}
+            </svg>
+          </button>
+        </div>
+      );
+    }
+
+    if (field === 'password_confirm') {
+      return (
+        <div className="floating-label-group" style={{ position: 'relative' }}>
+          <input type={showConfirmPassword ? 'text' : 'password'} {...fieldProps} required minLength="8" />
+          <label htmlFor={field} className="floating-label">Confirm Password</label>
+          <button type="button" className="password-toggle" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {showConfirmPassword ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /> : 
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.036 12.322a1 1 0 010-1.644 6.553 6.553 0 0112.908 0 1 1 0 010 1.644L14.707 14l1.106 1.106a1 1 0 001.414 0 6.553 6.553 0 01-12.191-5.784z" />}
+            </svg>
+          </button>
+        </div>
+      );
+    }
+
+    if (field === 'gender') {
+      return (
+        <div className="floating-label-group">
+          <select {...fieldProps} required>
             <option value="">-- Select Gender --</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
+            <option value="Other">Other</option>
           </select>
+          <label htmlFor={field} className="floating-label">Gender *</label>
+        </div>
+      );
+    }
+
+    return (
+      <div className="floating-label-group">
+        <input {...fieldProps} required={['username', 'email', 'address'].includes(field)} />
+        <label htmlFor={field} className="floating-label">
+          {field.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+          {['username', 'email', 'address'].includes(field) ? ' *' : ''}
+        </label>
+      </div>
+    );
+  };
+
+  return (
+    <div className="login-hero">
+      <div className="card">
+        <h2>Create Account</h2>
+        
+        {backendError && <div className="message message-error">{backendError}</div>}
+        {error && <div className="message message-error">{error}</div>}
+        
+        <div className="step-indicator">
+          {steps.map((step, index) => (
+            <div
+              key={step.title}
+              className={`step-dot ${currentStep > index + 1 ? 'completed' : ''} ${currentStep === index + 1 ? 'active' : ''}`}
+            />
+          ))}
         </div>
 
-        <div className="form-group">
-          <label htmlFor="address">Address *</label>
-          <input
-            type="text"
-            id="address"
-            name="address"
-            value={formData.address}
-            onChange={handleChange}
-            required
-          />
-        </div>
+        <form onSubmit={handleStepSubmit}>
+          {!backendUp && (
+            <div className="message message-error">
+              Backend not available – start the server and refresh.
+            </div>
+          )}
+          
+          {steps[currentStep - 1].fields.map(field => renderField(field))}
+          
+          <div className="auth-buttons">
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={loading || !backendUp}
+              style={{ width: '100%' }}
+            >
+              {loading ? 'Creating...' : currentStep === totalSteps ? 'Create Account' : 'Next Step'}
+            </button>
+          </div>
 
-        <div className="form-group">
-          <label htmlFor="age">Age *</label>
-          <input
-            type="number"
-            id="age"
-            name="age"
-            value={formData.age}
-            onChange={handleChange}
-            required
-            min="0"
-          />
-        </div>
+          {currentStep > 1 && (
+            <button
+              type="button"
+              className="btn btn-ghost"
+              onClick={prevStep}
+              style={{ width: '100%', marginTop: '12px' }}
+            >
+              Previous
+            </button>
+          )}
+        </form>
 
-        <div className="form-group">
-          <label htmlFor="password">Password *</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-            minLength="8"
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="password_confirm">Confirm Password *</label>
-          <input
-            type="password"
-            id="password_confirm"
-            name="password_confirm"
-            value={formData.password_confirm}
-            onChange={handleChange}
-            required
-            minLength="8"
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="btn btn-primary"
-          style={{ width: '100%' }}
-          disabled={loading || !backendUp}
-        >
-          {loading ? 'Registering...' : 'Register'}
-        </button>
-      </form>
-
-      <p style={{ marginTop: '20px', textAlign: 'center' }}>
-        Already have an account? <Link to="/login">Login here</Link>
-      </p>
+        <p className="login-footer" style={{ marginTop: '24px', textAlign: 'center' }}>
+          Already have an account? <Link to="/login" className="register-link">Sign in here</Link>
+        </p>
+      </div>
     </div>
   );
 }
